@@ -1122,8 +1122,11 @@ def proxy_info_from_url(url, method="http", noproxy=None):
     if noproxy == "*":
         bypass_hosts = AllHosts
     elif noproxy.strip():
-        bypass_hosts = noproxy.split(",")
-        bypass_hosts = filter(bool, bypass_hosts)  # To exclude empty string.
+        bypass_hosts = map(str.strip,noproxy.split(","))
+        if "*" in bypass_hosts:
+            bypass_hosts = AllHosts
+        else:
+            bypass_hosts = filter(bool, bypass_hosts)  # To exclude empty string.
 
     pi.bypass_hosts = bypass_hosts
     return pi
